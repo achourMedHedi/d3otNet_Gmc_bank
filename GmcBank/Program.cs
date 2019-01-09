@@ -8,7 +8,12 @@ namespace GmcBank
         static void Main(string[] args)
         {
             Bank<Client> bank = new Bank<Client>("gmc bank" , 21458);
-            bank.AddClient(new Client("achou", 15001950));
+            bank = bank.LoadFile();
+            foreach (Client c in bank.clients)
+            {
+                Console.WriteLine(c.cin);
+            }
+           /* bank.AddClient(new Client("achou", 15001950));
             bank.AddAgent();
             Client client = bank.GetClient(15001950);
             Business business = new Business(1, client);
@@ -24,7 +29,7 @@ namespace GmcBank
                 Console.WriteLine(c.cin);
             }
 
-            bank.SaveFile();
+            bank.SaveFile();*/
 
             Console.ReadLine();
         }

@@ -44,9 +44,9 @@ namespace GmcBank
         public void RemoveAgent() { }
         public void RemoveAgent(int nbAgents) { }
         //load file
-        public Bank<Client> Load(string path="/data.json" )
+        public Bank<Client> LoadFile(string path="/data.json" )
         {
-            string filePath = File.ReadAllText(path);
+            string filePath = File.ReadAllText(@"C:\Users\achou\source\repos\GmcBank\GmcBank\data.json");
             MemoryStream stream = new MemoryStream(Encoding.UTF8.GetBytes(filePath));
             DataContractJsonSerializer serRead = new DataContractJsonSerializer(typeof(Bank<Client>));
 
