@@ -1,13 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 using System.Text;
 
 namespace GmcBank
 {
+    [DataContract]
     public class Client : IClient<AbsctractAccount>
     {
+        [DataMember]
         public string name { get; set; }
+        [DataMember]
         public int cin { get; set; }
+        [DataMember]
         public Dictionary<long, AbsctractAccount> accounts;
 
         public Client() { }
@@ -20,7 +25,7 @@ namespace GmcBank
 
         public void CloseAccount(AbsctractAccount account)
         {
-            throw new NotImplementedException();
+            accounts[account.accountNumber].state = "Closed";
         }
 
         public void CreateAccount(AbsctractAccount account)

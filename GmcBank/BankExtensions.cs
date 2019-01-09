@@ -13,12 +13,16 @@ namespace GmcBank
         }
         public static Client GetClient(this Bank<Client> bank, long nbClient)
         {
-            Client client = (from c in bank.clients where c.cin.Equals(nbClient) select c).FirstOrDefault() ;
+            Client client = (from c in bank.clients where c.cin == nbClient select c).FirstOrDefault() ;
             if (client == null)
             {
                 throw new Exception("cant found this account");
             }
             return client;
         }
+      
+
+
+
     }
 }

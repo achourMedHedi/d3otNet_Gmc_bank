@@ -1,17 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 using System.Text;
 
 namespace GmcBank
 {
+    [DataContract]
     public class Transaction
     {
+        [DataMember]
         public Guid transactionNumber { get; set; }
+        [DataMember]
         public long sourceAccountnNumber { get; set; }
+        [DataMember]
         public long targetAccountnNumber { get; set; }
+        [DataMember]
         public double amount { get; set; }
+        [DataMember]
         public DateTime date { get; set; }
+        [DataMember]
         public string state { get; set; }
+        [DataMember]
         public string direction { get; set; }
 
         public Transaction() { }
@@ -23,6 +32,7 @@ namespace GmcBank
             amount = a;
             date = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
             state = "Ready"; 
+            direction = "incoming";
             // transaction direction will depend on the user
         }
     }

@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 using System.Text;
 
 namespace GmcBank
 {
-    class Business : AbsctractAccount
+    public class Business : AbsctractAccount
     {
         public override double TaxRatio { get; set; }
 

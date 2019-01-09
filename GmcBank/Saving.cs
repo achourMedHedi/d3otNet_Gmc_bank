@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 using System.Text;
 
 namespace GmcBank
 {
-    class Saving : AbsctractAccount
+    [DataContract]
+    public class Saving : AbsctractAccount
     {
+        [DataMember]
         public override double TaxRatio { get; set; }
 
         public Saving() : base() { }
