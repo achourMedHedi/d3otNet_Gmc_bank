@@ -30,7 +30,7 @@ namespace GmcBank
             sourceAccountnNumber = source;
             targetAccountnNumber = target;
             amount = a;
-            date = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
+            date = DateTime.Now;
             state = "Ready"; 
             direction = "incoming";
             // transaction direction will depend on the user

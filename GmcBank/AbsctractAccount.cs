@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
 
@@ -18,7 +19,7 @@ namespace GmcBank
         [DataMember]
         public string owner { get; set; }
         [DataMember]
-        public Dictionary<Guid , Transaction> transactions { get; set; }
+        public Dictionary<Guid, Transaction> transactions;
         [DataMember]
         public DateTime creationDate { get; set; }
         [DataMember]
@@ -40,10 +41,20 @@ namespace GmcBank
         public abstract void Debit(double amount);  
         public void Credit(double amount ) { }
         public virtual void SendMoney(double amount ,long targetaccountNumber) { }
-        public Hashtable GetAllTransactions => new Hashtable();
-        public Hashtable GetTransactionsByDate (DateTime dateTime) => new Hashtable();
-        public Hashtable GetTransactionsByTarget (Transaction transaction) => new Hashtable();
-        public Hashtable GetTransactionsByQuery (Func<Hashtable> func) => new Hashtable();
+        public Dictionary<Guid, Transaction> GetAllTransactions => (from i in transactions.Values orderby i.date descending select i).ToDictionary(d => d.transactionNumber); 
+        public Dictionary<Guid, Transaction> GetTransactionsByDate (string dateTime)
+        {
+            var result = from i in transactions.Values where i.date.Equals(DateTime.Parse(dateTime)) select i;
+
+            return result.ToDictionary(d => d.transactionNumber) ;
+        }
+        public Dictionary<Guid, Transaction> GetTransactionsByTarget(long accountNumber)
+        {
+            var result = from i in transactions.Values where i.targetAccountnNumber == accountNumber orderby i.date select i;
+            return result.ToDictionary( d => d.transactionNumber);
+        }
+
+        public Dictionary<Guid, Transaction> GetTransactionsByQuery (Func<Hashtable> func) => new Dictionary<Guid, Transaction>();
         
         public int CompareTo(object obj)
         {

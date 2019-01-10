@@ -20,8 +20,11 @@ namespace GmcBank
             }
             return client;
         }
-      
 
+        public static void AddTransaction(this AbsctractAccount account, Transaction transaction)
+        {
+            account.transactions.Add(transaction.transactionNumber, transaction);
+        }
 
 
     }

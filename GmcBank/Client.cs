@@ -13,7 +13,7 @@ namespace GmcBank
         [DataMember]
         public int cin { get; set; }
         [DataMember]
-        public Dictionary<long, AbsctractAccount> accounts;
+        private Dictionary<long, AbsctractAccount> accounts;
 
         public Client() { }
         public Client(string n , int c)
@@ -38,9 +38,7 @@ namespace GmcBank
             throw new NotImplementedException();
         }
 
-        public Dictionary<long, AbsctractAccount> GetAllAccounts()
-        {
-            throw new NotImplementedException();
-        }
+        public Dictionary<long, AbsctractAccount> GetAllAccounts() => accounts;
+        
     }
 }
