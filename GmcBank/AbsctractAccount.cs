@@ -39,28 +39,37 @@ namespace GmcBank
         }
 
         public abstract void Debit(double amount);  
+
         public void Credit(double amount ) { }
-        public virtual void SendMoney(double amount ,long targetaccountNumber) { }
-        public Dictionary<Guid, Transaction> GetAllTransactions => (from i in transactions.Values orderby i.date descending select i).ToDictionary(d => d.transactionNumber); 
+
+        public virtual void SendMoney(double amount ,long targetaccountNumber) { balance.CompareTo(amount); }
+
+        public Dictionary<Guid, Transaction> GetAllTransactions => (from i in transactions.Values orderby i.date descending select i).ToDictionary(d => d.transactionNumber);
+
         public Dictionary<Guid, Transaction> GetTransactionsByDate (string dateTime)
         {
             var result = from i in transactions.Values where i.date.Equals(DateTime.Parse(dateTime)) select i;
 
             return result.ToDictionary(d => d.transactionNumber) ;
         }
+
         public Dictionary<Guid, Transaction> GetTransactionsByTarget(long accountNumber)
         {
             var result = from i in transactions.Values where i.targetAccountnNumber == accountNumber orderby i.date select i;
             return result.ToDictionary( d => d.transactionNumber);
         }
 
-        public Dictionary<Guid, Transaction> GetTransactionsByQuery (Func<Hashtable> func) => new Dictionary<Guid, Transaction>();
-        
-        public int CompareTo(object obj)
+        public Dictionary<Guid, Transaction> GetTransactionsByQuery (string exp)
         {
-            throw new NotImplementedException();
+
+            return new Dictionary<Guid, Transaction>();
         }
 
+        public int CompareTo(object obj)
+        {
+            return balance.CompareTo(obj);
+        }
         
+
     }
 }

@@ -35,9 +35,17 @@ namespace GmcBank
                 Console.WriteLine(c.cin);
             }
             Client client = bank.GetClient(15001950);
-            string dateInput = "01/08/2016 01:02:04";
-            DateTime parsedDate = DateTime.Parse("01/08/2016 01:02:04");
-            Console.WriteLine(parsedDate);
+            try
+            {
+                bank.GetClient(5444);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+            Console.WriteLine("---------------");
+
+
             /*bank.AddClient(new Client("achou", 15001950));
             bank.AddAgent();
             Client client = bank.GetClient(15001950);

@@ -16,7 +16,7 @@ namespace GmcBank
             Client client = (from c in bank.clients where c.cin == nbClient select c).FirstOrDefault() ;
             if (client == null)
             {
-                throw new Exception("cant found this account");
+                throw new Exception("account not found ");
             }
             return client;
         }

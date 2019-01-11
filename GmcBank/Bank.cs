@@ -36,13 +36,13 @@ namespace GmcBank
         {
             throw new NotImplementedException();
         }
-        public void AddTransaction() { }
+        //public void AddTransaction() { }
         public Hashtable Transactions () { return new Hashtable(); }
         public HashSet<AbsctractAccount> Accounts () { return new HashSet<AbsctractAccount>(); }
         public void AddAgent() { agent++; }
-        public void AddAgent(int nbAgents) { }
-        public void RemoveAgent() { }
-        public void RemoveAgent(int nbAgents) { }
+        public void AddAgent(int nbAgents) { agent += nbAgents; }
+        public void RemoveAgent() { agent -= 1; }
+        public void RemoveAgent(int nbAgents) { agent -= nbAgents; }
         //load file
         public Bank<Client> LoadFile(string path="/data.json" )
         {
