@@ -19,7 +19,7 @@ namespace GmcBank
         [DataMember]
         public int agent { get; set; }
         [DataMember]
-        public List<TClient> clients { get; set; }
+        private List<TClient> clients = null;
         //public HashSet<AbsctractAccount> accounts;
         //public Hashtable transactions;
 
@@ -31,7 +31,22 @@ namespace GmcBank
             clients = new List<TClient>();
         }
 
-        
+        public List<TClient> Clients
+        {
+            get
+            {
+                return clients;
+            }
+        }
+      
+       /* private List<Client> LoadData()
+        {
+            List<Client> temp = new List<Client>();
+            Client client = new Client("ssss", 2222);
+            temp.Add(client);
+            return temp; 
+        }*/
+
         public bool Equals(TClient other)
         {
             throw new NotImplementedException();

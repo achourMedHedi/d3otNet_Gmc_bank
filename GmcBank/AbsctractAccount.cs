@@ -19,7 +19,7 @@ namespace GmcBank
         [DataMember]
         public string owner { get; set; }
         [DataMember]
-        public Dictionary<Guid, Transaction> transactions;
+        public Lazy<Dictionary<Guid, Transaction>> transaction;
         [DataMember]
         public DateTime creationDate { get; set; }
         [DataMember]
@@ -33,11 +33,18 @@ namespace GmcBank
             balance = 1000;
             accountNumber = accNumber;
             owner = client.name;
-            transactions = new Dictionary<Guid, Transaction>();
+            transaction = new Lazy<Dictionary<Guid, Transaction>>();
             creationDate = DateTime.Now;
             state = "Active";
         }
 
+        public Dictionary<Guid, Transaction> transactions
+        {
+            get
+            {
+                return transaction.Value;
+            }
+        }
         public abstract void Debit(double amount);  
 
         public void Credit(double amount ) { }

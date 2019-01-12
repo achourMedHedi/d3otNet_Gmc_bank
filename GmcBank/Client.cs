@@ -13,15 +13,24 @@ namespace GmcBank
         [DataMember]
         public int cin { get; set; }
         [DataMember]
-        private Dictionary<long, AbsctractAccount> accounts;
+        private Lazy<Dictionary<long, AbsctractAccount>> account;
 
         public Client() { }
         public Client(string n , int c)
         {
             name = n;
             cin = c;
-            accounts = new Dictionary<long, AbsctractAccount>();
+            account = new Lazy<Dictionary<long, AbsctractAccount>>();
         }
+
+        public Dictionary<long, AbsctractAccount> accounts
+        {
+            get
+            {
+                return account.Value;
+            }
+        }
+
 
         public void CloseAccount(AbsctractAccount account)
         {

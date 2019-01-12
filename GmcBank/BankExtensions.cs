@@ -9,11 +9,11 @@ namespace GmcBank
     {
         public static void AddClient(this Bank<Client> bank, Client client )
         {
-            bank.clients.Add(client);
+            bank.Clients.Add(client);
         }
         public static Client GetClient(this Bank<Client> bank, long nbClient)
         {
-            Client client = (from c in bank.clients where c.cin == nbClient select c).FirstOrDefault() ;
+            Client client = (from c in bank.Clients where c.cin == nbClient select c).FirstOrDefault() ;
             if (client == null)
             {
                 throw new Exception("account not found ");
