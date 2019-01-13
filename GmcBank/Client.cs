@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 using System.Text;
@@ -6,40 +7,41 @@ using System.Text;
 namespace GmcBank
 {
     [DataContract]
-    public class Client : IClient<AbsctractAccount>
+    public class Client : IClient<AbsctractAccount> 
     {
         [DataMember]
         public string name { get; set; }
         [DataMember]
         public int cin { get; set; }
         [DataMember]
-        private Lazy<Dictionary<long, AbsctractAccount>> account;
+        public Lazy<Dictionary<long, AbsctractAccount>> accounts; 
 
         public Client() { }
         public Client(string n , int c)
         {
+            accounts = new Lazy<Dictionary<long, AbsctractAccount>>();
             name = n;
             cin = c;
-            account = new Lazy<Dictionary<long, AbsctractAccount>>();
         }
 
-        public Dictionary<long, AbsctractAccount> accounts
+         
+
+        public IEnumerable<AbsctractAccount> GetAllAccounts ()
         {
-            get
+            foreach (KeyValuePair<long , AbsctractAccount> a in accounts.Value )
             {
-                return account.Value;
+                yield return a.Value;
             }
         }
-
-
+     
         public void CloseAccount(AbsctractAccount account)
         {
-            accounts[account.accountNumber].state = "Closed";
+            accounts.Value[account.accountNumber].state = "Closed";
         }
 
-        public void CreateAccount(AbsctractAccount account)
+        public void CreateAccount(AbsctractAccount a)
         {
-            throw new NotImplementedException();
+            accounts.Value.Add(a.accountNumber , a);
         }
 
         public AbsctractAccount GetAccount(long accountNumber)
@@ -47,7 +49,8 @@ namespace GmcBank
             throw new NotImplementedException();
         }
 
-        public Dictionary<long, AbsctractAccount> GetAllAccounts() => accounts;
-        
+      
+
+
     }
 }

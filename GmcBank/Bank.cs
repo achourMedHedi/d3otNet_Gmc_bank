@@ -8,6 +8,17 @@ using System.Text;
 
 namespace GmcBank
 {
+    /// <summary>
+    /// lazy loading 
+    /// foreach 
+    /// and yield return => iEnumerable 
+    /// and when i call it with the name of function 
+    /// </summary>
+    /// <typeparam name="TClient"></typeparam>
+
+
+
+
     [DataContract]
     public class Bank<TClient> : IEquatable<TClient>
         where TClient : Client
@@ -19,7 +30,12 @@ namespace GmcBank
         [DataMember]
         public int agent { get; set; }
         [DataMember]
-        private List<TClient> clients = null;
+        private List<TClient> clients;
+
+        private readonly object lockAgent = new object();
+
+        private Queue transactions = new Queue();
+
         //public HashSet<AbsctractAccount> accounts;
         //public Hashtable transactions;
 
@@ -39,21 +55,43 @@ namespace GmcBank
             }
         }
       
-       /* private List<Client> LoadData()
-        {
-            List<Client> temp = new List<Client>();
-            Client client = new Client("ssss", 2222);
-            temp.Add(client);
-            return temp; 
-        }*/
 
         public bool Equals(TClient other)
         {
             throw new NotImplementedException();
         }
-        //public void AddTransaction() { }
-        public Hashtable Transactions () { return new Hashtable(); }
-        public HashSet<AbsctractAccount> Accounts () { return new HashSet<AbsctractAccount>(); }
+
+        /// <summary>
+        /// add transaction to the Queue 
+        /// and test if there an agents to execute the transaction 
+        /// send money from sender and credit the receiver
+        /// </summary>
+        public void AddTransaction(Transaction transaction)
+        {
+            // add transaction to the queue 
+            transactions.Enqueue(transaction);
+            // if theres an agent 
+            
+            if (agent > 0)
+            {
+                // lock 
+
+                lock (lockAgent)
+                {
+                    // with thread :/
+                }
+        
+            }
+            // sender account
+            // receiver account 
+            // sender.sendMoney
+            // receiver.credit 
+
+        }
+
+
+        //public Hashtable Transactions () { return new Hashtable(); }
+        //public HashSet<AbsctractAccount> Accounts () { return new HashSet<AbsctractAccount>(); }
         public void AddAgent() { agent++; }
         public void AddAgent(int nbAgents) { agent += nbAgents; }
         public void RemoveAgent() { agent -= 1; }

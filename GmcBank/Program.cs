@@ -3,7 +3,21 @@ using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization.Json;
 using System.Text;
+//Lazy<IEnumerable<Dictionary<long, AbsctractAccount>>> b = new Lazy<IEnumerable<Dictionary<long, AbsctractAccount>>>(() => c.LoadAccounts());
+/*
+public IEnumerable<Dictionary<long, AbsctractAccount>> LoadAccounts()
+{
+    Dictionary<long, AbsctractAccount> acc = new Dictionary<long, AbsctractAccount>();
+    foreach (Dictionary<long, AbsctractAccount> a in accounts)
+    {
+        foreach (KeyValuePair<long, AbsctractAccount> item in a)
+        {
+            acc.Add(item.Value.accountNumber, item.Value);
+        }
 
+    }
+    yield return acc;
+}*/
 namespace GmcBank
 {
     class Program
@@ -11,65 +25,33 @@ namespace GmcBank
         
         static void Main(string[] args)
         {
-            
-            Bank<Client> bank = new Bank<Client>("gmc aaaaa" , 21458);
+
+            Bank<Client> bank = new Bank<Client>("gmc bank" , 654789);
             bank = bank.LoadFile();
-            // bank = bank2   ;
-            Console.WriteLine(bank.name);
-            Console.WriteLine();
-            List<Client> lista = bank.Clients;
-            
-            foreach (Client c in bank.Clients)
+            /*Client client = new Client("achour", 1500);
+            bank.Clients.Add(client);
+            Business business = new Business(2154, client);
+            client.CreateAccount(business);
+
+            business.AddTransaction(new Transaction(222222 , 333333 , 0000000));*/
+            foreach (Client client in bank.Clients)
             {
-                //Console.WriteLine(c.account.IsValueCreated + "++++++++");
-                foreach (KeyValuePair<long, AbsctractAccount> account in c.accounts)
+                Console.WriteLine();
+                foreach (AbsctractAccount a in client.GetAllAccounts())
                 {
-                    //Console.WriteLine(c.account.IsValueCreated + "------------");
-
-                    Console.WriteLine(account.Value.balance + "xd");
-                    account.Value.AddTransaction(new Transaction(1, 1, 1));
-                  foreach (KeyValuePair<Guid , Transaction> transaction in account.Value.GetAllTransactions)
+                    Console.WriteLine("hello " + a.owner);
+                    Console.WriteLine();
+                    foreach (Transaction transaction in a.GetAllTransactions())
                     {
-                        Console.WriteLine(transaction.Value.targetAccountnNumber + " " + transaction.Value.date);
-                      
+                        Console.WriteLine("t = " + transaction.transactionNumber);
                     }
-                    foreach (KeyValuePair<Guid, Transaction> t in account.Value.GetTransactionsByTarget(55555))
+                    foreach (Transaction t in a.GetTransactionsByTarget(333333))
                     {
-                        Console.WriteLine(t.Key + " h " + t.Value.date);
-                        
-                    }
-                   foreach (KeyValuePair<Guid, Transaction> transaction in account.Value.GetTransactionsByDate("10/01/2019 00:00:00"))
-                    {
-                        Console.WriteLine(transaction.Value.targetAccountnNumber + " time time time  " + transaction.Value.date);
-
+                        Console.WriteLine("enaaaaaaa " + t.transactionNumber);
                     }
                 }
-                Console.WriteLine(c.cin);
             }
-         
-          /*  Console.WriteLine("---------------");
-
-
-            bank.AddClient(new Client("achou", 15001950));
-            bank.AddAgent();
-            Client client = bank.GetClient(15001950);
-            Business business = new Business(1, client);
-            Saving saving = new Saving(3, new Client("hedi", 3333));
-            client.GetAllAccounts().Add(business.accountNumber, business);
-            client.GetAllAccounts().Add(saving.accountNumber, saving);
-            client.CloseAccount(business);
-            Transaction transaction = new Transaction(2145, 55555, 2000);
-            business.AddTransaction(new Transaction(1010, 55555, 1000));
-            business.AddTransaction(new Transaction(2145, 22222, 2000));
-            business.AddTransaction(new Transaction(1010, 33333, 1000));
-            business.AddTransaction(new Transaction(2145, 22222, 2000));
-            business.GetAllTransactions.Add(Guid.NewGuid(), transaction); 
-            foreach (Client c in bank.Clients)
-            {
-                Console.WriteLine(c.cin);
-            }
-            
-            bank.SaveFile();*/
+           // bank.SaveFile();
 
             Console.ReadLine();
         }

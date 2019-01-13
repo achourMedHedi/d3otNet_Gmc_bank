@@ -19,13 +19,14 @@ namespace GmcBank
         [DataMember]
         public string owner { get; set; }
         [DataMember]
-        public Lazy<Dictionary<Guid, Transaction>> transaction;
-        [DataMember]
         public DateTime creationDate { get; set; }
         [DataMember]
         public string state { get; set; }
         [DataMember]
         public virtual double TaxRatio { get; set; }
+
+        [DataMember]
+        private Lazy<Dictionary<Guid, Transaction>> transactions;
 
         public AbsctractAccount() { } 
         public AbsctractAccount(long accNumber , Client client)
@@ -33,38 +34,49 @@ namespace GmcBank
             balance = 1000;
             accountNumber = accNumber;
             owner = client.name;
-            transaction = new Lazy<Dictionary<Guid, Transaction>>();
+            transactions = new Lazy<Dictionary<Guid, Transaction>>();
             creationDate = DateTime.Now;
             state = "Active";
         }
 
-        public Dictionary<Guid, Transaction> transactions
+     
+
+        public IEnumerable<Transaction> GetAllTransactions ()
         {
-            get
+            foreach (KeyValuePair<Guid , Transaction> t in transactions.Value)
             {
-                return transaction.Value;
+                yield return t.Value; 
             }
         }
+
+        public void AddTransaction (Transaction t)
+        {
+            transactions.Value.Add(t.transactionNumber, t);
+        }
+
         public abstract void Debit(double amount);  
 
         public void Credit(double amount ) { }
 
         public virtual void SendMoney(double amount ,long targetaccountNumber) { balance.CompareTo(amount); }
 
-        public Dictionary<Guid, Transaction> GetAllTransactions => (from i in transactions.Values orderby i.date descending select i).ToDictionary(d => d.transactionNumber);
-
-        public Dictionary<Guid, Transaction> GetTransactionsByDate (string dateTime)
+        public IEnumerable<Transaction> GetTransactionsByDate (string dateTime)
         {
-            var result = from i in transactions.Values where i.date.Equals(DateTime.Parse(dateTime)) select i;
-
-            return result.ToDictionary(d => d.transactionNumber) ;
+            var result = from i in transactions.Value where i.Value.date.Equals(DateTime.Parse(dateTime)) select i;
+            foreach (KeyValuePair<Guid , Transaction> transaction in result)
+            {
+                yield return transaction.Value;
+            } 
         }
-
-        public Dictionary<Guid, Transaction> GetTransactionsByTarget(long accountNumber)
+        public IEnumerable<Transaction> GetTransactionsByTarget(long accountNumber)
         {
-            var result = from i in transactions.Values where i.targetAccountnNumber == accountNumber orderby i.date select i;
-            return result.ToDictionary( d => d.transactionNumber);
+            var result = from i in transactions.Value where i.Value.targetAccountnNumber == accountNumber orderby i.Value.date select i;
+            foreach (KeyValuePair<Guid, Transaction> transaction in result)
+            {
+                yield return transaction.Value;
+            }
         }
+       
 
         public Dictionary<Guid, Transaction> GetTransactionsByQuery (string exp)
         {
