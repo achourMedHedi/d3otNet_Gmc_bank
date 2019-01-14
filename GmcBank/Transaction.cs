@@ -32,7 +32,7 @@ namespace GmcBank
             amount = a;
             date = DateTime.Now;
             state = "Ready"; 
-            direction = "incoming";
+            direction = "Incoming ";
             // transaction direction will depend on the user
         }
     }

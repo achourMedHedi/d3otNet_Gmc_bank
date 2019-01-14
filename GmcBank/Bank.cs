@@ -2,23 +2,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Json;
 using System.Text;
+using System.Threading;
 
 namespace GmcBank
 {
-    /// <summary>
-    /// lazy loading 
-    /// foreach 
-    /// and yield return => iEnumerable 
-    /// and when i call it with the name of function 
-    /// </summary>
-    /// <typeparam name="TClient"></typeparam>
-
-
-
-
+ 
     [DataContract]
     public class Bank<TClient> : IEquatable<TClient>
         where TClient : Client
@@ -34,7 +26,7 @@ namespace GmcBank
 
         private readonly object lockAgent = new object();
 
-        private Queue transactions = new Queue();
+        private Queue transactionsQueue = new Queue();
 
         //public HashSet<AbsctractAccount> accounts;
         //public Hashtable transactions;
@@ -42,6 +34,7 @@ namespace GmcBank
         public Bank() { }
         public Bank (string n , int sCode)
         {
+            agent = 1;
             name = n;
             swiftCode = sCode;
             clients = new List<TClient>();
@@ -56,11 +49,6 @@ namespace GmcBank
         }
       
 
-        public bool Equals(TClient other)
-        {
-            throw new NotImplementedException();
-        }
-
         /// <summary>
         /// add transaction to the Queue 
         /// and test if there an agents to execute the transaction 
@@ -69,18 +57,39 @@ namespace GmcBank
         public void AddTransaction(Transaction transaction)
         {
             // add transaction to the queue 
-            transactions.Enqueue(transaction);
             // if theres an agent 
-            
+                //transactionsQueue.Enqueue(transaction);
+
             if (agent > 0)
             {
-                // lock 
 
+                // lock 
+                agent--; 
                 lock (lockAgent)
                 {
                     // with thread :/
+                    AbsctractAccount sender = account(transaction.sourceAccountnNumber);
+                    AbsctractAccount receiver = account(transaction.targetAccountnNumber);
+                    try
+                    {
+                        Thread.Sleep(3000);
+                        sender.SendMoney(transaction.amount, transaction.targetAccountnNumber);
+                        //sender.AddTransaction(transaction);
+                        receiver.Credit(transaction.amount);
+                        //transaction.direction = "Incoming ";
+                        receiver.AddTransaction(transaction);
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e.Message);
+                    }
+                    agent++; 
                 }
         
+            }
+            else
+            {
+                throw new Exception("no agents ");
             }
             // sender account
             // receiver account 
@@ -90,8 +99,26 @@ namespace GmcBank
         }
 
 
+        public bool Equals(TClient other)
+        {
+            throw new NotImplementedException();
+        }
+
         //public Hashtable Transactions () { return new Hashtable(); }
-        //public HashSet<AbsctractAccount> Accounts () { return new HashSet<AbsctractAccount>(); }
+        public AbsctractAccount account (long accNumber)
+        {
+            foreach (Client client in clients)
+            {
+                foreach (AbsctractAccount a in client.GetAllAccounts())
+                {
+                    if (a.accountNumber == accNumber)
+                    {
+                        return a;
+                    }
+                }
+            }
+            return null;
+        }
         public void AddAgent() { agent++; }
         public void AddAgent(int nbAgents) { agent += nbAgents; }
         public void RemoveAgent() { agent -= 1; }

@@ -3,21 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization.Json;
 using System.Text;
-//Lazy<IEnumerable<Dictionary<long, AbsctractAccount>>> b = new Lazy<IEnumerable<Dictionary<long, AbsctractAccount>>>(() => c.LoadAccounts());
-/*
-public IEnumerable<Dictionary<long, AbsctractAccount>> LoadAccounts()
-{
-    Dictionary<long, AbsctractAccount> acc = new Dictionary<long, AbsctractAccount>();
-    foreach (Dictionary<long, AbsctractAccount> a in accounts)
-    {
-        foreach (KeyValuePair<long, AbsctractAccount> item in a)
-        {
-            acc.Add(item.Value.accountNumber, item.Value);
-        }
 
-    }
-    yield return acc;
-}*/
 namespace GmcBank
 {
     class Program
@@ -30,28 +16,30 @@ namespace GmcBank
             bank = bank.LoadFile();
             /*Client client = new Client("achour", 1500);
             bank.Clients.Add(client);
-            Business business = new Business(2154, client);
+            Saving business = new Saving(2154, client);
+            Business business2 = new Business(1111, client);
             client.CreateAccount(business);
-
-            business.AddTransaction(new Transaction(222222 , 333333 , 0000000));*/
-            foreach (Client client in bank.Clients)
+            client.CreateAccount(business2);
+            
+            bank.AddAgent();
+            bank.AddAgent();
+            bank.AddTransaction(new Transaction(2154, 1111, 500));
+            bank.AddTransaction(new Transaction(2154, 1111, 500));*/
+            foreach (Client clients in bank.Clients)
             {
                 Console.WriteLine();
-                foreach (AbsctractAccount a in client.GetAllAccounts())
+                foreach (AbsctractAccount a in clients.GetAllAccounts())
                 {
-                    Console.WriteLine("hello " + a.owner);
-                    Console.WriteLine();
+                    Console.WriteLine("hello " + a.balance + " " +a.owner );
                     foreach (Transaction transaction in a.GetAllTransactions())
                     {
-                        Console.WriteLine("t = " + transaction.transactionNumber);
+                        Console.WriteLine("t = " + transaction.direction + " " + transaction.date );
                     }
-                    foreach (Transaction t in a.GetTransactionsByTarget(333333))
-                    {
-                        Console.WriteLine("enaaaaaaa " + t.transactionNumber);
-                    }
+                    Console.WriteLine("-----");
+
                 }
             }
-           // bank.SaveFile();
+            //bank.SaveFile();
 
             Console.ReadLine();
         }

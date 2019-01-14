@@ -56,9 +56,15 @@ namespace GmcBank
 
         public abstract void Debit(double amount);  
 
-        public void Credit(double amount ) { }
+        public void Credit(double amount)
+        {
+            balance += amount;
+        }
 
-        public virtual void SendMoney(double amount ,long targetaccountNumber) { balance.CompareTo(amount); }
+        public virtual void SendMoney(double amount ,long targetaccountNumber)
+        {
+
+        }
 
         public IEnumerable<Transaction> GetTransactionsByDate (string dateTime)
         {
@@ -77,8 +83,12 @@ namespace GmcBank
             }
         }
        
-
-        public Dictionary<Guid, Transaction> GetTransactionsByQuery (string exp)
+        /// <summary>
+        /// Dynamic linq :/
+        /// </summary>
+        /// <param name="exp"></param>
+        /// <returns></returns>
+        public Dictionary<Guid, Transaction> GetTransactionsByQuery (string dynamicLink)
         {
 
             return new Dictionary<Guid, Transaction>();
