@@ -1,6 +1,8 @@
-﻿using System;
+﻿using GmcBank.CustomAttribute;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 
 namespace GmcBank
@@ -20,7 +22,33 @@ namespace GmcBank
             }
             return client;
         }
+        public static void Auther(this object x)
+        {
+            Console.WriteLine("methods");
+            
+            foreach (var propertyInfo in x.GetType().GetMethods())
+            {
+                //var propertyValue = propertyInfo.GetType();
+                var autherAttribute = propertyInfo.GetCustomAttribute<AutherAttribute>();
+                if (autherAttribute != null )
+                {
+                    Console.WriteLine(propertyInfo.Name + " auther = " + autherAttribute.name   ); ;
+                }
+            }
+            Console.WriteLine("attributes");
 
+            foreach (var p in x.GetType().GetProperties())
+            {
+                //var propertyValue = propertyInfo.GetType();
+                var autherAttribute = p.GetCustomAttribute<AutherAttribute>();
+                if (autherAttribute != null)
+                {
+                    Console.WriteLine(p.Name + " auther = " + autherAttribute.name); ;
+                }
+            }
+            Console.WriteLine("no auther");
+
+        }
         /*public static void AddTransaction(this AbsctractAccount account, Transaction transaction)
         {
             account.transactions.Add(transaction.transactionNumber, transaction);

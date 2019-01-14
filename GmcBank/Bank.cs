@@ -1,6 +1,8 @@
-﻿using System;
+﻿using GmcBank.CustomAttribute;
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Json;
@@ -9,15 +11,20 @@ using System.Threading;
 
 namespace GmcBank
 {
- 
     [DataContract]
+
     public class Bank<TClient> : IEquatable<TClient>
         where TClient : Client
     {
+        [Required]
         [DataMember]
         public string name { get; set; }
+
+        [Auther(name = "achour")]
+        [Required]
         [DataMember]
         public int swiftCode { get; set; }
+
         [DataMember]
         public int agent { get; set; }
         [DataMember]
@@ -126,6 +133,7 @@ namespace GmcBank
         public void RemoveAgent() { agent -= 1; }
         public void RemoveAgent(int nbAgents) { agent -= nbAgents; }
         //load file
+        [Auther(name = "achour")]
         public Bank<Client> LoadFile(string path)
         {
             string filePath = File.ReadAllText(path);
@@ -138,6 +146,7 @@ namespace GmcBank
             
         }
         //save file
+        [Auther(name = "achour")]
         public void SaveFile(string path=@"C:\Users\achou\source\repos\GmcBank\GmcBank\data.json")
         {
             MemoryStream stream = new MemoryStream();

@@ -8,18 +8,20 @@ namespace GmcBank
 {
     class Program
     {
-        
         static void Main(string[] args)
         {
 
             Bank<Client> bank = new Bank<Client>("gmc bank" , 654789);
-            bank = bank.LoadFile(@"C:\Users\achou\source\repos\GmcBank\GmcBank\data.json");
+            //string  x = bank.Auther();
+            //bank = bank.LoadFile(@"C:\Users\achou\source\repos\GmcBank\GmcBank\data.json");
+            bank.Auther();
             /*Client client = new Client("achour", 1500);
             bank.Clients.Add(client);
             Saving business = new Saving(2154, client);
             Business business2 = new Business(1111, client);
             client.CreateAccount(business);
             client.CreateAccount(business2);
+
             
             bank.AddAgent();
             bank.AddAgent();
