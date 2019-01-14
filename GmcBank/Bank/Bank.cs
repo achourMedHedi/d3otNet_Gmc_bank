@@ -13,8 +13,10 @@ namespace GmcBank
 {
     [DataContract]
 
-    public class Bank<TClient> : IEquatable<TClient>
-        where TClient : Client
+    public class Bank<TClient, TAbsctractAccount, TTransaction> : IEquatable<TClient> , IBank<TClient, TAbsctractAccount, TTransaction>
+        where TClient : Client<TAbsctractAccount, TTransaction>
+        where TAbsctractAccount : AbsctractAccount<TTransaction> 
+        where TTransaction : Transaction
     {
         [Required]
         [DataMember]
@@ -60,7 +62,7 @@ namespace GmcBank
         /// and test if there an agents to execute the transaction 
         /// send money from sender and credit the receiver
         /// </summary>
-        public void AddTransaction(Transaction transaction)
+        public void AddTransaction(TTransaction transaction)
         {
             // add transaction to the queue 
             // if theres an agent 
@@ -80,8 +82,8 @@ namespace GmcBank
                     transactionsQueue.Enqueue(transaction);
                     Console.WriteLine("queue");
                     // with thread :/
-                    AbsctractAccount sender = account(transaction.sourceAccountnNumber);
-                    AbsctractAccount receiver = account(transaction.targetAccountnNumber);
+                    TAbsctractAccount sender = account(transaction.sourceAccountnNumber);
+                    TAbsctractAccount receiver = account(transaction.targetAccountnNumber);
                     try
                     {
                         Thread.Sleep(3000);
@@ -114,12 +116,13 @@ namespace GmcBank
         }
 
         //public Hashtable Transactions () { return new Hashtable(); }
-        public AbsctractAccount account (long accNumber)
+        public TAbsctractAccount account (long accNumber)
         {
-            foreach (Client client in clients)
+            foreach (TClient client in clients)
             {
-                foreach (AbsctractAccount a in client.GetAllAccounts())
+                foreach (TAbsctractAccount a in client.GetAllAccounts())
                 {
+                    
                     if (a.accountNumber == accNumber)
                     {
                         return a;
@@ -134,14 +137,14 @@ namespace GmcBank
         public void RemoveAgent(int nbAgents) { agent -= nbAgents; }
         //load file
         [Auther(name = "achour")]
-        public Bank<Client> LoadFile(string path)
+        public Bank<TClient, TAbsctractAccount, TTransaction> LoadFile(string path)
         {
             string filePath = File.ReadAllText(path);
             MemoryStream stream = new MemoryStream(Encoding.UTF8.GetBytes(filePath));
-            DataContractJsonSerializer serRead = new DataContractJsonSerializer(typeof(Bank<Client>));
+            DataContractJsonSerializer serRead = new DataContractJsonSerializer(typeof(Bank<TClient, TAbsctractAccount, TTransaction>));
 
             stream.Position = 0;
-            Bank<Client> bank = (Bank<Client>)serRead.ReadObject(stream);
+            Bank<TClient, TAbsctractAccount, TTransaction> bank = (Bank<TClient, TAbsctractAccount, TTransaction>)serRead.ReadObject(stream);
             return bank; 
             
         }
@@ -150,7 +153,7 @@ namespace GmcBank
         public void SaveFile(string path=@"C:\Users\achou\source\repos\GmcBank\GmcBank\data.json")
         {
             MemoryStream stream = new MemoryStream();
-            DataContractJsonSerializer ser = new DataContractJsonSerializer(typeof(Bank<Client>)) ;
+            DataContractJsonSerializer ser = new DataContractJsonSerializer(typeof(Bank<TClient, TAbsctractAccount, TTransaction>)) ;
             ser.WriteObject(stream, this);
 
             stream.Position = 0;

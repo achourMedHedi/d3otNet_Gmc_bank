@@ -8,7 +8,9 @@ namespace GmcBank
     [DataContract]
     [KnownType(typeof(Business))]
     [KnownType(typeof(Saving))]
-    abstract public class AbsctractAccount : IComparable
+    abstract public class AbsctractAccount<TTransaction> : IComparable , IAbsctractAccount<TTransaction>
+        where TTransaction : Transaction 
+
     {
         [DataMember]
         public double balance { get; set; }
@@ -24,30 +26,30 @@ namespace GmcBank
         public virtual double TaxRatio { get; set; }
 
         [DataMember]
-        private Lazy<Dictionary<Guid, Transaction>> transactions;
-
+        private Lazy<Dictionary<Guid, TTransaction>> transactions;
+        
         public AbsctractAccount() { } 
-        public AbsctractAccount(long accNumber , Client client)
+        public AbsctractAccount(long accNumber , Client<AbsctractAccount<TTransaction> , TTransaction> client)
         {
             balance = 1000;
             accountNumber = accNumber;
             owner = client.name;
-            transactions = new Lazy<Dictionary<Guid, Transaction>>();
+            transactions = new Lazy<Dictionary<Guid, TTransaction>>();
             creationDate = DateTime.Now;
             state = "Active";
         }
 
      
 
-        public IEnumerable<Transaction> GetAllTransactions ()
+        public IEnumerable<TTransaction> GetAllTransactions ()
         {
-            foreach (KeyValuePair<Guid , Transaction> t in transactions.Value)
+            foreach (KeyValuePair<Guid , TTransaction> t in transactions.Value)
             {
                 yield return t.Value; 
             }
         }
 
-        public void AddTransaction (Transaction t)
+        public void AddTransaction (TTransaction t)
         {
             transactions.Value.Add(t.transactionNumber, t);
         }
@@ -64,18 +66,18 @@ namespace GmcBank
 
         }
 
-        public IEnumerable<Transaction> GetTransactionsByDate (string dateTime)
+        public IEnumerable<TTransaction> GetTransactionsByDate (string dateTime)
         {
             var result = from i in transactions.Value where i.Value.date.Equals(DateTime.Parse(dateTime)) select i;
-            foreach (KeyValuePair<Guid , Transaction> transaction in result)
+            foreach (KeyValuePair<Guid , TTransaction> transaction in result)
             {
                 yield return transaction.Value;
             } 
         }
-        public IEnumerable<Transaction> GetTransactionsByTarget(long accountNumber)
+        public IEnumerable<TTransaction> GetTransactionsByTarget(long accountNumber)
         {
             var result = from i in transactions.Value where i.Value.targetAccountnNumber == accountNumber orderby i.Value.date select i;
-            foreach (KeyValuePair<Guid, Transaction> transaction in result)
+            foreach (KeyValuePair<Guid, TTransaction> transaction in result)
             {
                 yield return transaction.Value;
             }
@@ -86,10 +88,10 @@ namespace GmcBank
         /// </summary>
         /// <param name="exp"></param>
         /// <returns></returns>
-        public Dictionary<Guid, Transaction> GetTransactionsByQuery (string dynamicLink)
+        public Dictionary<Guid, TTransaction> GetTransactionsByQuery (string dynamicLink)
         {
 
-            return new Dictionary<Guid, Transaction>();
+            return new Dictionary<Guid, TTransaction>();
         }
 
         public int CompareTo(object obj)

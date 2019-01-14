@@ -4,13 +4,13 @@ using System.Runtime.Serialization;
 namespace GmcBank
 {
     [DataContract]
-    public class Saving : AbsctractAccount
+    public class Saving : AbsctractAccount<Transaction>
     {
         [DataMember]
         public override double TaxRatio { get; set; }
 
         public Saving() : base() { }
-        public Saving(long accNumber, Client client) : base(accNumber, client)
+        public Saving(long accNumber, Client<AbsctractAccount<Transaction>, Transaction> client) : base(accNumber, client)
         {
             TaxRatio = 0.01;
         }

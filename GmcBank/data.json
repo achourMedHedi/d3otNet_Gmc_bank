@@ -1,1 +1,71 @@
-{"agent":1,"clients":[],"name":"gmc bank","swiftCode":654789}
+{
+  "agent": 3,
+  "clients": [
+    {
+      "accounts": {
+        "Value": [
+          {
+            "Key": 2154,
+            "Value": {
+              "__type": "Saving:#GmcBank",
+              "accountNumber": 2154,
+              "balance": 480,
+              "creationDate": "\/Date(1547502741994+0100)\/",
+              "owner": "achour",
+              "state": "Active",
+              "TaxRatio": 0.01,
+              "transactions": {
+                "Value": [
+                  {
+                    "Key": "dfddc247-3d46-4d8a-a29f-995b249e85a8",
+                    "Value": {
+                      "amount": 500,
+                      "date": "\/Date(1547502745169+0100)\/",
+                      "direction": "OutGoing",
+                      "sourceAccountnNumber": 2154,
+                      "state": "Ready",
+                      "targetAccountnNumber": 1111,
+                      "transactionNumber": "dfddc247-3d46-4d8a-a29f-995b249e85a8"
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "Key": 1111,
+            "Value": {
+              "__type": "Business:#GmcBank",
+              "TaxRatio": 0.1,
+              "accountNumber": 1111,
+              "balance": 1500,
+              "creationDate": "\/Date(1547502741999+0100)\/",
+              "owner": "achour",
+              "state": "Active",
+              "transactions": {
+                "Value": [
+                  {
+                    "Key": "17e7c0ba-b510-4dcd-8c32-1f301a69a64c",
+                    "Value": {
+                      "amount": 500,
+                      "date": "\/Date(1547502742020+0100)\/",
+                      "direction": "Incoming ",
+                      "sourceAccountnNumber": 2154,
+                      "state": "Ready",
+                      "targetAccountnNumber": 1111,
+                      "transactionNumber": "17e7c0ba-b510-4dcd-8c32-1f301a69a64c"
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "cin": 1500,
+      "name": "achour"
+    }
+  ],
+  "name": "gmc bank",
+  "swiftCode": 654789
+}

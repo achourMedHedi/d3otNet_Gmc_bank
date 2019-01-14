@@ -9,13 +9,13 @@ namespace GmcBank
 {
     public static class BankExtensions
     {
-        public static void AddClient(this Bank<Client> bank, Client client )
+        public static void AddClient(this Bank<Client<AbsctractAccount<Transaction>, Transaction>, AbsctractAccount<Transaction>, Transaction> bank, Client<AbsctractAccount<Transaction>, Transaction> client )
         {
             bank.Clients.Add(client);
         }
-        public static Client GetClient(this Bank<Client> bank, long nbClient)
+        public static Client<AbsctractAccount<Transaction>, Transaction> GetClient(this Bank<Client<AbsctractAccount<Transaction>, Transaction>, AbsctractAccount<Transaction>, Transaction> bank, long nbClient)
         {
-            Client client = (from c in bank.Clients where c.cin == nbClient select c).FirstOrDefault() ;
+            Client<AbsctractAccount<Transaction>, Transaction> client = (from c in bank.Clients where c.cin == nbClient select c).FirstOrDefault() ;
             if (client == null)
             {
                 throw new Exception("account not found ");

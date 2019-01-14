@@ -4,12 +4,12 @@
 namespace GmcBank
 {
     delegate void DebitAccount(double amount);
-    public class Business : AbsctractAccount
+    public class Business : AbsctractAccount<Transaction>
     {
         public override double TaxRatio { get; set; }
 
         public Business() : base() { }
-        public Business (long accNumber , Client client) : base(accNumber , client)
+        public Business (long accNumber , Client<AbsctractAccount<Transaction>, Transaction> client) : base(accNumber , client)
         {
             TaxRatio = 0.1; 
         }
