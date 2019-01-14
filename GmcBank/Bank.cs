@@ -2,7 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Json;
 using System.Text;
@@ -64,6 +63,10 @@ namespace GmcBank
             {
 
                 // lock 
+                // sender account
+                // receiver account 
+                // sender.sendMoney
+                // receiver.credit 
                 agent--; 
                 lock (lockAgent)
                 {
@@ -76,9 +79,7 @@ namespace GmcBank
                     {
                         Thread.Sleep(3000);
                         sender.SendMoney(transaction.amount, transaction.targetAccountnNumber);
-                        //sender.AddTransaction(transaction);
                         receiver.Credit(transaction.amount);
-                        //transaction.direction = "Incoming ";
                         receiver.AddTransaction(transaction);
                     }
                     catch (Exception e)
@@ -95,10 +96,7 @@ namespace GmcBank
             {
                 throw new Exception("no agents ");
             }
-            // sender account
-            // receiver account 
-            // sender.sendMoney
-            // receiver.credit 
+         
 
         }
 
@@ -128,9 +126,9 @@ namespace GmcBank
         public void RemoveAgent() { agent -= 1; }
         public void RemoveAgent(int nbAgents) { agent -= nbAgents; }
         //load file
-        public Bank<Client> LoadFile(string path="/data.json" )
+        public Bank<Client> LoadFile(string path)
         {
-            string filePath = File.ReadAllText(@"C:\Users\achou\source\repos\GmcBank\GmcBank\data.json");
+            string filePath = File.ReadAllText(path);
             MemoryStream stream = new MemoryStream(Encoding.UTF8.GetBytes(filePath));
             DataContractJsonSerializer serRead = new DataContractJsonSerializer(typeof(Bank<Client>));
 
@@ -140,7 +138,7 @@ namespace GmcBank
             
         }
         //save file
-        public void SaveFile(string path="/data.json")
+        public void SaveFile(string path=@"C:\Users\achou\source\repos\GmcBank\GmcBank\data.json")
         {
             MemoryStream stream = new MemoryStream();
             DataContractJsonSerializer ser = new DataContractJsonSerializer(typeof(Bank<Client>)) ;
@@ -148,7 +146,7 @@ namespace GmcBank
 
             stream.Position = 0;
             StreamReader seralize = new StreamReader(stream);
-            File.WriteAllText(@"C:\Users\achou\source\repos\GmcBank\GmcBank\data.json", seralize.ReadToEnd());
+            File.WriteAllText(path, seralize.ReadToEnd());
 
 
         }

@@ -13,8 +13,8 @@ namespace GmcBank
         {
 
             Bank<Client> bank = new Bank<Client>("gmc bank" , 654789);
-            //bank = bank.LoadFile();
-            Client client = new Client("achour", 1500);
+            bank = bank.LoadFile(@"C:\Users\achou\source\repos\GmcBank\GmcBank\data.json");
+            /*Client client = new Client("achour", 1500);
             bank.Clients.Add(client);
             Saving business = new Saving(2154, client);
             Business business2 = new Business(1111, client);
@@ -24,7 +24,7 @@ namespace GmcBank
             bank.AddAgent();
             bank.AddAgent();
             bank.AddTransaction(new Transaction(2154, 1111, 500));
-            bank.AddTransaction(new Transaction(2154, 1111, 500));
+            bank.AddTransaction(new Transaction(2154, 1111, 500));*/
             foreach (Client clients in bank.Clients)
             {
                 Console.WriteLine();
@@ -39,7 +39,7 @@ namespace GmcBank
 
                 }
             }
-            //bank.SaveFile();
+            bank.SaveFile();
 
             Console.ReadLine();
         }

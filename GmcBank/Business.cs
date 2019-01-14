@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Runtime.Serialization;
-using System.Text;
+
 
 namespace GmcBank
 {
+    delegate void DebitAccount(double amount);
     public class Business : AbsctractAccount
     {
         public override double TaxRatio { get; set; }
@@ -16,11 +15,12 @@ namespace GmcBank
         }
         public override void SendMoney(double amount, long targetaccountNumber)
         {
+            DebitAccount debitAccount = Debit;
             base.SendMoney(amount, targetaccountNumber);
             double debit = amount + (amount * TaxRatio);
             if ((balance - debit ) >= 0 )
             {
-                Debit(debit);
+                debitAccount(debit);
                 //balance -= (amount + (amount * TaxRatio));
                 Transaction transaction = new Transaction(accountNumber, targetaccountNumber, amount);
                 transaction.direction = "OutGoing";
