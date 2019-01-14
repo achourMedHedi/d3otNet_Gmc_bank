@@ -32,8 +32,6 @@ namespace GmcBank
         [DataMember]
         private List<TClient> clients;
 
-        private readonly object lockAgent = new object();
-
         public  Queue transactionsQueue = new Queue();
 
         //public HashSet<AbsctractAccount> accounts;
@@ -66,7 +64,8 @@ namespace GmcBank
         {
             // add transaction to the queue 
             // if theres an agent 
-                //transactionsQueue.Enqueue(transaction);
+            //transactionsQueue.Enqueue(transaction);
+            agent--;
 
             if (agent > 0)
             {
@@ -76,8 +75,7 @@ namespace GmcBank
                 // receiver account 
                 // sender.sendMoney
                 // receiver.credit 
-                agent--; 
-                lock (lockAgent)
+                lock (transactionsQueue)
                 {
                     transactionsQueue.Enqueue(transaction);
                     Console.WriteLine("queue");
@@ -86,7 +84,9 @@ namespace GmcBank
                     TAbsctractAccount receiver = account(transaction.targetAccountnNumber);
                     try
                     {
+                        Console.WriteLine("d5alt");
                         Thread.Sleep(3000);
+                        Console.WriteLine("lde5el");
                         sender.SendMoney(transaction.amount, transaction.targetAccountnNumber);
                         receiver.Credit(transaction.amount);
                         receiver.AddTransaction(transaction);
@@ -97,15 +97,16 @@ namespace GmcBank
                     }
                     transactionsQueue.Dequeue();
                     Console.WriteLine("dequeue");
-                    agent++; 
                 }
         
             }
             else
             {
-                throw new Exception("no agents ");
+                Console.WriteLine("no agents ");
             }
-         
+            agent++;
+
+
 
         }
 

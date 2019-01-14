@@ -24,7 +24,6 @@ namespace GmcBank
 
             
             bank.AddAgent();
-            bank.AddAgent();
             bank.AddTransaction(new Transaction(2154, 1111, 500));
             bank.AddTransaction(new Transaction(2154, 1111, 500));
             foreach (Client<AbsctractAccount<Transaction> , Transaction> clients in bank.Clients)
