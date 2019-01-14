@@ -26,7 +26,7 @@ namespace GmcBank
 
         private readonly object lockAgent = new object();
 
-        private Queue transactionsQueue = new Queue();
+        public  Queue transactionsQueue = new Queue();
 
         //public HashSet<AbsctractAccount> accounts;
         //public Hashtable transactions;
@@ -67,6 +67,8 @@ namespace GmcBank
                 agent--; 
                 lock (lockAgent)
                 {
+                    transactionsQueue.Enqueue(transaction);
+                    Console.WriteLine("queue");
                     // with thread :/
                     AbsctractAccount sender = account(transaction.sourceAccountnNumber);
                     AbsctractAccount receiver = account(transaction.targetAccountnNumber);
@@ -83,6 +85,8 @@ namespace GmcBank
                     {
                         Console.WriteLine(e.Message);
                     }
+                    transactionsQueue.Dequeue();
+                    Console.WriteLine("dequeue");
                     agent++; 
                 }
         
